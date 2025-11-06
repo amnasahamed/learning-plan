@@ -1,0 +1,407 @@
+{
+  "courseTitle": "30-Day AI Systems Builder Path",
+  "courseDescription": "Transform from automation beginner to AI systems architect in just 30 days",
+  "timeCommitment": "30 minutes/day or 3-4 hours/week",
+  "weeks": [
+    {
+      "weekNumber": 1,
+      "title": "JavaScript for Automations",
+      "goal": "Master JavaScript fundamentals needed for n8n Function nodes",
+      "project": {
+        "title": "Smart Data Transformer",
+        "description": "Build a reusable n8n workflow that validates, cleans, and transforms API responses",
+        "requirements": [
+          "Accept JSON input (simulate API response)",
+          "Validate required fields exist",
+          "Clean/normalize text (trim, lowercase)",
+          "Add metadata (timestamp, id)",
+          "Filter out invalid entries",
+          "Return formatted output"
+        ],
+        "successCriteria": [
+          "Handles missing fields gracefully",
+          "Works with 1 or 100 items",
+          "Code is commented and readable",
+          "Output format is consistent"
+        ],
+        "bonus": "Add error logging for invalid items"
+      },
+      "days": [
+        {
+          "dayNumber": 1,
+          "title": "Variables & Data Types",
+          "duration": "30 minutes",
+          "learningObjectives": [
+            "Understand the difference between const and let",
+            "Work with strings, numbers, and booleans",
+            "Use template literals for string interpolation"
+          ],
+          "content": {
+            "theory": "JavaScript variables are containers for storing data values. In modern JavaScript, we use `const` for values that won't change and `let` for values that will. Understanding when to use each is crucial for writing clean, bug-free code.\n\n**const vs let:**\n- `const` - Use for values that won't be reassigned (most of the time)\n- `let` - Use for values that will change (counters, accumulators)\n- Never use `var` in modern JavaScript\n\n**Data Types:**\n- **String**: Text data wrapped in quotes\n- **Number**: Integers and decimals (JavaScript doesn't distinguish)\n- **Boolean**: true or false values\n\n**Template Literals:**\nTemplate literals use backticks (`) and allow you to embed expressions using ${expression} syntax.",
+            "concepts": [
+              {
+                "name": "const declaration",
+                "explanation": "Creates a read-only reference to a value. The variable identifier cannot be reassigned.",
+                "example": "const userName = 'AI Builder';\nconst maxRetries = 3;"
+              },
+              {
+                "name": "let declaration",
+                "explanation": "Creates a mutable variable that can be reassigned.",
+                "example": "let counter = 0;\ncounter = counter + 1; // This works"
+              },
+              {
+                "name": "Template Literals",
+                "explanation": "Allow embedded expressions and multi-line strings using backticks.",
+                "example": "const name = 'John';\nconst greeting = `Hello, ${name}!`;\nconsole.log(greeting); // Hello, John!"
+              }
+            ],
+            "codeExamples": [
+              {
+                "title": "Basic Variable Usage",
+                "language": "javascript",
+                "code": "// In n8n Function node:\nconst name = \"AI Builder\";\nconst dailyGoal = 30;\nconst isCompleted = false;\n\n// Template literal\nconst message = `${name} - Goal: ${dailyGoal} mins`;\n\nreturn [{\n  json: {\n    message: message,\n    completed: isCompleted\n  }\n}];",
+                "explanation": "This example shows how to declare variables and use template literals in an n8n Function node context."
+              },
+              {
+                "title": "Adding Timestamp to Data",
+                "language": "javascript",
+                "code": "// Get input data from previous node\nconst inputData = $json;\n\n// Add timestamp\nconst timestamp = new Date().toISOString();\nconst processedBy = 'n8n-automation';\n\nreturn [{\n  json: {\n    ...inputData,\n    processedAt: timestamp,\n    processedBy: processedBy\n  }\n}];",
+                "explanation": "This demonstrates how to take input data and enrich it with metadata using modern JavaScript."
+              }
+            ]
+          },
+          "practice": {
+            "title": "Create a Data Enricher",
+            "instructions": "Create a Function node in n8n that takes input data and adds:\n1. A timestamp (current date/time)\n2. A unique ID (use Date.now())\n3. A status field set to 'processed'\n4. Return the enriched data",
+            "starterCode": "// Your code here\nconst inputData = $json;\n\n// Add your fields...\n\nreturn [{ json: { /* your result */ } }];",
+            "hints": [
+              "Use new Date().toISOString() for timestamps",
+              "Use Date.now() for simple numeric IDs",
+              "Use the spread operator (...) to copy existing fields"
+            ],
+            "solution": "const inputData = $json;\n\nconst enrichedData = {\n  ...inputData,\n  timestamp: new Date().toISOString(),\n  id: Date.now(),\n  status: 'processed'\n};\n\nreturn [{ json: enrichedData }];"
+          },
+          "keyTakeaways": [
+            "Use const by default, let only when you need to reassign",
+            "Template literals (`) are more powerful than string concatenation (+)",
+            "All n8n Function nodes must return an array of objects with json property",
+            "The spread operator (...) is useful for copying object properties"
+          ],
+          "resources": [
+            {
+              "title": "JavaScript.info - Variables",
+              "url": "https://javascript.info/variables",
+              "type": "article"
+            },
+            {
+              "title": "MDN - Template Literals",
+              "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals",
+              "type": "documentation"
+            }
+          ]
+        },
+        {
+          "dayNumber": 2,
+          "title": "Arrays & Array Methods",
+          "duration": "30 minutes",
+          "learningObjectives": [
+            "Understand array data structures",
+            "Master .map(), .filter(), and .find() methods",
+            "Use array destructuring for cleaner code"
+          ],
+          "content": {
+            "theory": "Arrays are ordered collections of values. JavaScript provides powerful methods to transform and filter arrays without writing traditional loops. These methods are essential for working with data in n8n.\n\n**Key Array Methods:**\n- `.map()` - Transform each element and return a new array\n- `.filter()` - Keep only elements that pass a test\n- `.find()` - Get the first element that matches\n- `.reduce()` - Combine all elements into a single value\n\n**Why These Matter in n8n:**\nWhen n8n passes data between nodes, it often comes as an array of items. You'll constantly be mapping, filtering, and transforming these arrays.",
+            "concepts": [
+              {
+                "name": "Array Creation",
+                "explanation": "Arrays can be created with square brackets. They can hold any data type.",
+                "example": "const numbers = [1, 2, 3, 4, 5];\nconst mixed = ['text', 42, true, { key: 'value' }];"
+              },
+              {
+                "name": ".map() Method",
+                "explanation": "Creates a new array by transforming each element. Returns an array of the same length.",
+                "example": "const numbers = [1, 2, 3];\nconst doubled = numbers.map(num => num * 2);\n// Result: [2, 4, 6]"
+              },
+              {
+                "name": ".filter() Method",
+                "explanation": "Creates a new array with elements that pass a test. May return fewer elements.",
+                "example": "const numbers = [1, 2, 3, 4, 5];\nconst evens = numbers.filter(num => num % 2 === 0);\n// Result: [2, 4]"
+              },
+              {
+                "name": ".find() Method",
+                "explanation": "Returns the first element that matches the condition, or undefined.",
+                "example": "const users = [{id: 1, name: 'Alice'}, {id: 2, name: 'Bob'}];\nconst user = users.find(u => u.id === 2);\n// Result: {id: 2, name: 'Bob'}"
+              }
+            ],
+            "codeExamples": [
+              {
+                "title": "Filter High-Value Items",
+                "language": "javascript",
+                "code": "// Get all items from previous nodes\nconst items = $input.all();\n\n// Filter items where price > 100\nconst highValueItems = items\n  .map(item => item.json)  // Extract the json data\n  .filter(data => data.price > 100);  // Keep only expensive items\n\n// Return in n8n format\nreturn highValueItems.map(item => ({ json: item }));",
+                "explanation": "This pattern is common in n8n: get all items, extract json data, filter, then convert back to n8n format."
+              },
+              {
+                "title": "Transform API Response",
+                "language": "javascript",
+                "code": "// Example: API returns users with firstName and lastName\n// We want fullName instead\n\nconst users = $input.all().map(item => item.json);\n\nconst transformedUsers = users.map(user => ({\n  id: user.id,\n  fullName: `${user.firstName} ${user.lastName}`,\n  email: user.email\n}));\n\nreturn transformedUsers.map(user => ({ json: user }));",
+                "explanation": "Demonstrates chaining .map() to first extract data, then transform it."
+              },
+              {
+                "title": "Find Specific Item",
+                "language": "javascript",
+                "code": "// Find a specific user by email\nconst users = $input.all().map(item => item.json);\nconst targetEmail = 'john@example.com';\n\nconst foundUser = users.find(user => user.email === targetEmail);\n\nif (foundUser) {\n  return [{ json: { found: true, user: foundUser } }];\n} else {\n  return [{ json: { found: false, message: 'User not found' } }];\n}",
+                "explanation": "Shows how to search for a specific item and handle the case when it's not found."
+              }
+            ]
+          },
+          "practice": {
+            "title": "Filter Incomplete Todos",
+            "instructions": "You receive an array of todo items. Each has:\n- id (number)\n- task (string)\n- completed (boolean)\n- priority (string: 'low', 'medium', 'high')\n\nCreate a function that:\n1. Filters out completed todos\n2. Filters to show only 'high' priority items\n3. Returns only the task text and id",
+            "starterCode": "const todos = [\n  { id: 1, task: 'Learn JavaScript', completed: false, priority: 'high' },\n  { id: 2, task: 'Build n8n workflow', completed: true, priority: 'high' },\n  { id: 3, task: 'Read docs', completed: false, priority: 'low' },\n  { id: 4, task: 'Practice arrays', completed: false, priority: 'high' }\n];\n\n// Your code here\n\nreturn [{ json: { /* your result */ } }];",
+            "hints": [
+              "Chain .filter() twice - once for completed, once for priority",
+              "Use .map() at the end to transform to only id and task",
+              "Remember: .filter() keeps items where the condition is true"
+            ],
+            "solution": "const todos = [\n  { id: 1, task: 'Learn JavaScript', completed: false, priority: 'high' },\n  { id: 2, task: 'Build n8n workflow', completed: true, priority: 'high' },\n  { id: 3, task: 'Read docs', completed: false, priority: 'low' },\n  { id: 4, task: 'Practice arrays', completed: false, priority: 'high' }\n];\n\nconst filtered = todos\n  .filter(todo => !todo.completed)\n  .filter(todo => todo.priority === 'high')\n  .map(todo => ({ id: todo.id, task: todo.task }));\n\nreturn [{ json: { highPriorityTodos: filtered, count: filtered.length } }];"
+          },
+          "keyTakeaways": [
+            ".map() transforms arrays element by element",
+            ".filter() creates a subset based on conditions",
+            "These methods don't modify the original array",
+            "You can chain multiple array methods together",
+            "Arrow functions (=>) make array methods concise"
+          ],
+          "resources": [
+            {
+              "title": "JavaScript.info - Array Methods",
+              "url": "https://javascript.info/array-methods",
+              "type": "article"
+            },
+            {
+              "title": "MDN - Array.prototype.map()",
+              "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map",
+              "type": "documentation"
+            }
+          ]
+        },
+        {
+          "dayNumber": 3,
+          "title": "Objects & JSON",
+          "duration": "30 minutes",
+          "learningObjectives": [
+            "Master JavaScript object syntax",
+            "Work with nested objects",
+            "Transform object structures",
+            "Use Object.keys(), Object.values(), Object.entries()"
+          ],
+          "content": {
+            "theory": "Objects are JavaScript's way of grouping related data together. In n8n, almost everything is an object - API responses, database records, user data. JSON (JavaScript Object Notation) is just a string representation of objects.\n\n**Object Basics:**\n- Key-value pairs: `{ key: value }`\n- Access with dot notation: `obj.key`\n- Access with bracket notation: `obj['key']` (useful for dynamic keys)\n- Nested objects: objects inside objects\n\n**Why This Matters:**\nEvery API you call returns JSON. Every node in n8n passes objects. Mastering object manipulation is critical for automation work.",
+            "concepts": [
+              {
+                "name": "Object Creation",
+                "explanation": "Objects store data as key-value pairs enclosed in curly braces.",
+                "example": "const user = {\n  name: 'Alice',\n  age: 30,\n  email: 'alice@example.com'\n};"
+              },
+              {
+                "name": "Accessing Properties",
+                "explanation": "Two ways: dot notation (obj.key) or bracket notation (obj['key']).",
+                "example": "const user = { name: 'Alice', age: 30 };\nconsole.log(user.name); // 'Alice'\nconsole.log(user['age']); // 30"
+              },
+              {
+                "name": "Nested Objects",
+                "explanation": "Objects can contain other objects, creating hierarchical data structures.",
+                "example": "const user = {\n  name: 'Alice',\n  address: {\n    city: 'New York',\n    zip: '10001'\n  }\n};\nconsole.log(user.address.city); // 'New York'"
+              },
+              {
+                "name": "Spread Operator",
+                "explanation": "The ... operator copies all properties from one object to another.",
+                "example": "const user = { name: 'Alice', age: 30 };\nconst updatedUser = { ...user, age: 31 };\n// updatedUser is { name: 'Alice', age: 31 }"
+              },
+              {
+                "name": "Object Methods",
+                "explanation": "Object.keys(), Object.values(), and Object.entries() help you work with objects.",
+                "example": "const user = { name: 'Alice', age: 30 };\nObject.keys(user); // ['name', 'age']\nObject.values(user); // ['Alice', 30]"
+              }
+            ],
+            "codeExamples": [
+              {
+                "title": "Restructure API Response",
+                "language": "javascript",
+                "code": "// API returns: { userId: 123, firstName: 'John', lastName: 'Doe', email: 'john@example.com' }\n// We want: { id: 123, fullName: 'John Doe', contact: { email: '...' } }\n\nconst apiResponse = $json;\n\nconst restructured = {\n  id: apiResponse.userId,\n  fullName: `${apiResponse.firstName} ${apiResponse.lastName}`,\n  contact: {\n    email: apiResponse.email\n  },\n  metadata: {\n    processedAt: new Date().toISOString(),\n    source: 'api'\n  }\n};\n\nreturn [{ json: restructured }];",
+                "explanation": "Common pattern: take flat API response and restructure into a more logical format."
+              },
+              {
+                "title": "Flatten Nested Object",
+                "language": "javascript",
+                "code": "// Input: { user: { profile: { name: 'Alice', email: 'alice@example.com' } } }\n// Output: { name: 'Alice', email: 'alice@example.com' }\n\nconst input = $json;\n\nconst flattened = {\n  name: input.user.profile.name,\n  email: input.user.profile.email\n};\n\nreturn [{ json: flattened }];",
+                "explanation": "Sometimes APIs nest data too deeply. Flatten it for easier use downstream."
+              },
+              {
+                "title": "Merge Multiple Objects",
+                "language": "javascript",
+                "code": "// Combine data from multiple sources\nconst userData = $node['Get User'].json;\nconst orderData = $node['Get Orders'].json;\nconst enrichmentData = {\n  processingDate: new Date().toISOString(),\n  version: '1.0'\n};\n\nconst combined = {\n  ...userData,\n  orders: orderData,\n  ...enrichmentData\n};\n\nreturn [{ json: combined }];",
+                "explanation": "Use spread operator to merge data from multiple n8n nodes."
+              },
+              {
+                "title": "Dynamic Key Access",
+                "language": "javascript",
+                "code": "// Access object properties dynamically\nconst data = $json;\nconst fieldToExtract = 'email'; // Could come from settings\n\nconst value = data[fieldToExtract];\n\nreturn [{\n  json: {\n    field: fieldToExtract,\n    value: value,\n    exists: value !== undefined\n  }\n}];",
+                "explanation": "Bracket notation lets you access properties using variable names."
+              }
+            ]
+          },
+          "practice": {
+            "title": "Transform Complex Object",
+            "instructions": "You receive this complex nested object from an API:\n\n```json\n{\n  \"data\": {\n    \"user\": {\n      \"personal\": {\n        \"firstName\": \"John\",\n        \"lastName\": \"Doe\",\n        \"age\": 30\n      },\n      \"contact\": {\n        \"email\": \"john@example.com\",\n        \"phone\": \"555-0123\"\n      }\n    },\n    \"subscription\": {\n      \"tier\": \"premium\",\n      \"active\": true\n    }\n  }\n}\n```\n\nTransform it into this flat structure:\n```json\n{\n  \"fullName\": \"John Doe\",\n  \"email\": \"john@example.com\",\n  \"phone\": \"555-0123\",\n  \"isPremium\": true,\n  \"age\": 30\n}\n```",
+            "starterCode": "const apiResponse = $json;\n\n// Your transformation here\n\nreturn [{ json: { /* result */ } }];",
+            "hints": [
+              "Navigate nested objects with dot notation: apiResponse.data.user.personal.firstName",
+              "For isPremium, check both tier and active fields",
+              "Use template literals for fullName"
+            ],
+            "solution": "const apiResponse = $json;\n\nconst transformed = {\n  fullName: `${apiResponse.data.user.personal.firstName} ${apiResponse.data.user.personal.lastName}`,\n  email: apiResponse.data.user.contact.email,\n  phone: apiResponse.data.user.contact.phone,\n  isPremium: apiResponse.data.subscription.tier === 'premium' && apiResponse.data.subscription.active,\n  age: apiResponse.data.user.personal.age\n};\n\nreturn [{ json: transformed }];"
+          },
+          "keyTakeaways": [
+            "Objects store related data as key-value pairs",
+            "Use dot notation for known keys, bracket notation for dynamic keys",
+            "Spread operator (...) is powerful for copying and merging objects",
+            "Most API responses are nested objects - learn to navigate them",
+            "JSON is just a string representation of JavaScript objects"
+          ],
+          "resources": [
+            {
+              "title": "JavaScript.info - Objects",
+              "url": "https://javascript.info/object",
+              "type": "article"
+            },
+            {
+              "title": "MDN - Working with Objects",
+              "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Working_with_Objects",
+              "type": "documentation"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "prerequisites": [
+    {
+      "category": "Required",
+      "items": [
+        {
+          "name": "n8n Cloud Account",
+          "description": "Free account at n8n.io for building workflows",
+          "url": "https://n8n.io",
+          "estimatedTime": "5 minutes"
+        },
+        {
+          "name": "API Keys",
+          "description": "At least one: OpenAI ($5 credit) or Google Gemini (free tier)",
+          "url": "https://platform.openai.com",
+          "estimatedTime": "10 minutes"
+        },
+        {
+          "name": "Code Editor",
+          "description": "VS Code or any text editor for local testing",
+          "url": "https://code.visualstudio.com",
+          "estimatedTime": "5 minutes"
+        },
+        {
+          "name": "GitHub Account",
+          "description": "For saving and versioning your workflows",
+          "url": "https://github.com",
+          "estimatedTime": "5 minutes"
+        }
+      ]
+    },
+    {
+      "category": "Recommended",
+      "items": [
+        {
+          "name": "Postman",
+          "description": "Test APIs before implementing in n8n",
+          "url": "https://postman.com",
+          "estimatedTime": "10 minutes"
+        },
+        {
+          "name": "Replit or CodeSandbox",
+          "description": "Quick JavaScript testing environment",
+          "url": "https://replit.com",
+          "estimatedTime": "5 minutes"
+        },
+        {
+          "name": "Python 3.9+",
+          "description": "Needed for Week 4 exercises",
+          "url": "https://python.org",
+          "estimatedTime": "15 minutes"
+        }
+      ]
+    }
+  ],
+  "resources": [
+    {
+      "category": "JavaScript Learning",
+      "items": [
+        {
+          "title": "JavaScript.info",
+          "url": "https://javascript.info",
+          "description": "Comprehensive modern JavaScript tutorial - read chapters 1-6",
+          "type": "tutorial"
+        },
+        {
+          "title": "MDN Web Docs",
+          "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript",
+          "description": "The definitive JavaScript reference",
+          "type": "documentation"
+        }
+      ]
+    },
+    {
+      "category": "n8n Specific",
+      "items": [
+        {
+          "title": "n8n Documentation",
+          "url": "https://docs.n8n.io",
+          "description": "Official n8n docs - your primary reference",
+          "type": "documentation"
+        },
+        {
+          "title": "n8n Function Node Guide",
+          "url": "https://docs.n8n.io/code-examples/expressions/function-nodes/",
+          "description": "Specific guide for writing Function node code",
+          "type": "guide"
+        },
+        {
+          "title": "n8n Community Forum",
+          "url": "https://community.n8n.io",
+          "description": "Ask questions and learn from other n8n users",
+          "type": "community"
+        }
+      ]
+    },
+    {
+      "category": "AI & APIs",
+      "items": [
+        {
+          "title": "OpenAI API Documentation",
+          "url": "https://platform.openai.com/docs",
+          "description": "Learn how to call GPT models programmatically",
+          "type": "documentation"
+        },
+        {
+          "title": "Google Gemini API",
+          "url": "https://ai.google.dev/docs",
+          "description": "Free alternative to OpenAI with generous limits",
+          "type": "documentation"
+        },
+        {
+          "title": "Prompt Engineering Guide",
+          "url": "https://www.promptingguide.ai",
+          "description": "Learn to write effective AI prompts",
+          "type": "guide"
+        }
+      ]
+    }
+  ]
+}
