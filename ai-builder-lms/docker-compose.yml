@@ -5,7 +5,7 @@ services:
     build: .
     container_name: ai-builder-lms
     ports:
-      - "3000:3000"
+      - "737:3000"
     volumes:
       # Persist user progress
       - ./data:/app/data
