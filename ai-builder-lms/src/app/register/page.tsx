@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { useAuth } from '@/context/AuthContext'
-import { Rocket, Mail, Lock, User, AlertCircle } from 'lucide-react'
+import { Rocket, Mail, Lock, User, AlertCircle, Linkedin } from 'lucide-react'
 
 export default function RegisterPage() {
   const [name, setName] = useState('')
@@ -147,6 +147,22 @@ export default function RegisterPage() {
           <Link href="/" className="text-sm text-gray-600 hover:text-gray-900">
             ← Back to home
           </Link>
+        </div>
+
+        {/* Footer */}
+        <div className="mt-8 pt-6 border-t border-gray-200 text-center">
+          <div className="flex items-center justify-center space-x-2 text-sm text-gray-600">
+            <span>Created by</span>
+            <a
+              href="https://www.linkedin.com/in/amnasahamed/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center space-x-1 text-blue-600 hover:text-blue-700 font-medium transition"
+            >
+              <span>Amna Sahamed</span>
+              <Linkedin className="w-4 h-4" />
+            </a>
+          </div>
         </div>
       </div>
     </div>

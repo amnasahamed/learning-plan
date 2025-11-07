@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { useAuth } from '@/context/AuthContext'
 import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { Rocket, Code, Brain, Zap, CheckCircle2, ArrowRight, Sparkles } from 'lucide-react'
+import { Rocket, Code, Brain, Zap, CheckCircle2, ArrowRight, Sparkles, Linkedin } from 'lucide-react'
 
 export default function HomePage() {
   const { user, loading } = useAuth()
@@ -262,7 +262,19 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center text-gray-600">
             <p className="font-semibold mb-2">30-Day AI Systems Builder</p>
-            <p className="text-sm">Transform from beginner to AI systems architect</p>
+            <p className="text-sm mb-4">Transform from beginner to AI systems architect</p>
+            <div className="flex items-center justify-center space-x-2 text-sm">
+              <span>Created by</span>
+              <a
+                href="https://www.linkedin.com/in/amnasahamed/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center space-x-1 text-blue-600 hover:text-blue-700 font-medium transition"
+              >
+                <span>Amna Sahamed</span>
+                <Linkedin className="w-4 h-4" />
+              </a>
+            </div>
           </div>
         </div>
       </footer>

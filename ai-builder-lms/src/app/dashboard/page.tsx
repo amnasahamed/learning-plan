@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/context/AuthContext'
-import { BookOpen, Code, Rocket, Target, CheckCircle2, Circle, Clock, Award, LogOut, User } from 'lucide-react'
+import { BookOpen, Code, Rocket, Target, CheckCircle2, Circle, Clock, Award, LogOut, User, Linkedin } from 'lucide-react'
 
 export default function DashboardPage() {
   const [progress, setProgress] = useState<any>(null)
@@ -287,7 +287,19 @@ export default function DashboardPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="text-center text-gray-600">
             <p className="font-semibold mb-2">30-Day AI Systems Builder Path</p>
-            <p className="text-sm">Transform from automation beginner to AI systems architect</p>
+            <p className="text-sm mb-4">Transform from automation beginner to AI systems architect</p>
+            <div className="flex items-center justify-center space-x-2 text-sm">
+              <span>Created by</span>
+              <a
+                href="https://www.linkedin.com/in/amnasahamed/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center space-x-1 text-blue-600 hover:text-blue-700 font-medium transition"
+              >
+                <span>Amna Sahamed</span>
+                <Linkedin className="w-4 h-4" />
+              </a>
+            </div>
           </div>
         </div>
       </footer>
