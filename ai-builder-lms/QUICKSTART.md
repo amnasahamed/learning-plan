@@ -16,11 +16,18 @@ cd ai-builder-lms
 # 2. Start the application
 docker-compose up -d
 
-# 3. Open your browser
-# Visit: http://localhost:3000
+# 3. Open your browser and create an account
+# Visit: http://localhost:737
 ```
 
 **That's it!** 🎉
+
+### First Time Setup
+1. Click "Get Started" or "Sign Up"
+2. Create your account (email + password)
+3. Start learning immediately!
+
+**Share with friends:** Just share the URL and they can create their own accounts.
 
 ### Stop the application
 

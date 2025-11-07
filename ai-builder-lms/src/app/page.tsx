@@ -1,265 +1,268 @@
 'use client'
 
-import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { BookOpen, Code, Rocket, Target, CheckCircle2, Circle, Clock, Award } from 'lucide-react'
+import { useAuth } from '@/context/AuthContext'
+import { useEffect } from 'react'
+import { useRouter } from 'next/navigation'
+import { Rocket, Code, Brain, Zap, CheckCircle2, ArrowRight, Sparkles } from 'lucide-react'
 
 export default function HomePage() {
-  const [progress, setProgress] = useState<any>(null)
-  const [loading, setLoading] = useState(true)
+  const { user, loading } = useAuth()
+  const router = useRouter()
 
   useEffect(() => {
-    fetchProgress()
-  }, [])
-
-  const fetchProgress = async () => {
-    try {
-      const res = await fetch('/api/progress')
-      const data = await res.json()
-      setProgress(data)
-    } catch (error) {
-      console.error('Error fetching progress:', error)
-    } finally {
-      setLoading(false)
+    if (!loading && user) {
+      router.push('/dashboard')
     }
+  }, [user, loading, router])
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+        </div>
+      </div>
+    )
   }
-
-  const completedDays = progress?.completedDays?.length || 0
-  const totalDays = 30
-  const progressPercent = (completedDays / totalDays) * 100
-
-  const weeks = [
-    {
-      number: 1,
-      title: 'JavaScript for Automations',
-      icon: Code,
-      days: [1, 2, 3, 4, 5],
-      project: 'Smart Data Transformer',
-      color: 'bg-blue-500'
-    },
-    {
-      number: 2,
-      title: 'APIs and Logic Flow',
-      icon: Target,
-      days: [8, 9, 10, 11, 12],
-      project: 'Weather Alert Bot',
-      color: 'bg-purple-500'
-    },
-    {
-      number: 3,
-      title: 'Smart Agents & AI APIs',
-      icon: Rocket,
-      days: [15, 16, 17, 18, 19],
-      project: 'Context-Aware AI Assistant',
-      color: 'bg-pink-500'
-    },
-    {
-      number: 4,
-      title: 'Python & System Architecture',
-      icon: Award,
-      days: [22, 23, 24, 25, 26],
-      project: 'Full RAG System',
-      color: 'bg-green-500'
-    }
-  ]
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <header className="bg-white/80 backdrop-blur-sm border-b border-gray-200 sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
-                <Rocket className="w-7 h-7 text-white" />
+              <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
+                <Rocket className="w-6 h-6 text-white" />
               </div>
               <div>
-                <h1 className="text-2xl font-bold text-gray-900">AI Systems Builder</h1>
-                <p className="text-sm text-gray-600">30-Day Learning Path</p>
+                <h1 className="text-xl font-bold text-gray-900">AI Systems Builder</h1>
+                <p className="text-xs text-gray-600">30-Day Learning Path</p>
               </div>
             </div>
             <div className="flex items-center space-x-4">
               <Link
-                href="/resources"
+                href="/login"
                 className="text-gray-700 hover:text-blue-600 font-medium transition"
               >
-                Resources
+                Login
               </Link>
               <Link
-                href="/progress"
-                className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition font-medium"
+                href="/register"
+                className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition font-medium"
               >
-                View Progress
+                Get Started
               </Link>
             </div>
           </div>
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Progress Overview */}
-        <div className="mb-8 bg-white rounded-2xl shadow-lg p-8 border border-gray-100">
-          <div className="flex items-center justify-between mb-4">
-            <div>
-              <h2 className="text-2xl font-bold text-gray-900">Your Progress</h2>
-              <p className="text-gray-600 mt-1">Keep the momentum going!</p>
-            </div>
-            <div className="text-right">
-              <div className="text-4xl font-bold text-blue-600">{completedDays}/30</div>
-              <div className="text-sm text-gray-500">Days Completed</div>
-            </div>
+      {/* Hero Section */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+        <div className="text-center">
+          <div className="inline-flex items-center space-x-2 bg-blue-100 text-blue-700 px-4 py-2 rounded-full text-sm font-semibold mb-6">
+            <Sparkles className="w-4 h-4" />
+            <span>Transform Your Career in 30 Days</span>
           </div>
 
-          {/* Progress Bar */}
-          <div className="relative">
-            <div className="h-4 bg-gray-200 rounded-full overflow-hidden">
-              <div
-                className="h-full bg-gradient-to-r from-blue-500 to-purple-600 progress-bar"
-                style={{ width: `${progressPercent}%` }}
-              />
-            </div>
-            <div className="text-sm text-gray-600 mt-2 text-right">
-              {progressPercent.toFixed(0)}% Complete
-            </div>
+          <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6">
+            Become an
+            <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent"> AI Systems Builder</span>
+          </h1>
+
+          <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
+            Master n8n automation, AI APIs, and intelligent system design. Build production-ready
+            AI solutions in just 30 minutes per day.
+          </p>
+
+          <div className="flex items-center justify-center space-x-4">
+            <Link
+              href="/register"
+              className="inline-flex items-center space-x-2 bg-blue-600 text-white px-8 py-4 rounded-lg hover:bg-blue-700 transition font-bold text-lg"
+            >
+              <span>Start Learning Free</span>
+              <ArrowRight className="w-5 h-5" />
+            </Link>
+            <Link
+              href="#features"
+              className="inline-flex items-center space-x-2 bg-white text-gray-700 px-8 py-4 rounded-lg hover:bg-gray-50 transition font-bold text-lg border-2 border-gray-200"
+            >
+              <span>Learn More</span>
+            </Link>
           </div>
 
-          {/* Quick Stats */}
-          <div className="grid grid-cols-3 gap-4 mt-6">
-            <div className="bg-blue-50 rounded-xl p-4 border border-blue-100">
-              <div className="flex items-center space-x-2">
-                <Clock className="w-5 h-5 text-blue-600" />
-                <span className="text-sm font-medium text-gray-700">Time/Day</span>
-              </div>
-              <div className="text-2xl font-bold text-blue-600 mt-2">30 min</div>
+          <div className="mt-12 flex items-center justify-center space-x-8 text-sm text-gray-600">
+            <div className="flex items-center space-x-2">
+              <CheckCircle2 className="w-5 h-5 text-green-500" />
+              <span>30 Days of Content</span>
             </div>
-            <div className="bg-purple-50 rounded-xl p-4 border border-purple-100">
-              <div className="flex items-center space-x-2">
-                <BookOpen className="w-5 h-5 text-purple-600" />
-                <span className="text-sm font-medium text-gray-700">Current Week</span>
-              </div>
-              <div className="text-2xl font-bold text-purple-600 mt-2">
-                Week {Math.min(Math.floor(completedDays / 7) + 1, 4)}
+            <div className="flex items-center space-x-2">
+              <CheckCircle2 className="w-5 h-5 text-green-500" />
+              <span>Hands-on Projects</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <CheckCircle2 className="w-5 h-5 text-green-500" />
+              <span>No Experience Needed</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Features */}
+      <section id="features" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+        <div className="text-center mb-16">
+          <h2 className="text-4xl font-bold text-gray-900 mb-4">What You'll Learn</h2>
+          <p className="text-xl text-gray-600">A complete curriculum from basics to advanced AI systems</p>
+        </div>
+
+        <div className="grid md:grid-cols-3 gap-8">
+          <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-8">
+            <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mb-4">
+              <Code className="w-6 h-6 text-blue-600" />
+            </div>
+            <h3 className="text-xl font-bold text-gray-900 mb-3">JavaScript & n8n</h3>
+            <p className="text-gray-600 mb-4">
+              Master JavaScript fundamentals and n8n automation. Build workflows that connect APIs,
+              process data, and automate tasks.
+            </p>
+            <ul className="space-y-2 text-sm text-gray-600">
+              <li className="flex items-center space-x-2">
+                <div className="w-1.5 h-1.5 bg-blue-600 rounded-full"></div>
+                <span>Variables, arrays, objects</span>
+              </li>
+              <li className="flex items-center space-x-2">
+                <div className="w-1.5 h-1.5 bg-blue-600 rounded-full"></div>
+                <span>API integration patterns</span>
+              </li>
+              <li className="flex items-center space-x-2">
+                <div className="w-1.5 h-1.5 bg-blue-600 rounded-full"></div>
+                <span>Error handling & debugging</span>
+              </li>
+            </ul>
+          </div>
+
+          <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-8">
+            <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center mb-4">
+              <Brain className="w-6 h-6 text-purple-600" />
+            </div>
+            <h3 className="text-xl font-bold text-gray-900 mb-3">AI Integration</h3>
+            <p className="text-gray-600 mb-4">
+              Connect to OpenAI, Claude, and Gemini. Build intelligent agents with memory,
+              context, and caching strategies.
+            </p>
+            <ul className="space-y-2 text-sm text-gray-600">
+              <li className="flex items-center space-x-2">
+                <div className="w-1.5 h-1.5 bg-purple-600 rounded-full"></div>
+                <span>AI API fundamentals</span>
+              </li>
+              <li className="flex items-center space-x-2">
+                <div className="w-1.5 h-1.5 bg-purple-600 rounded-full"></div>
+                <span>Dynamic prompt engineering</span>
+              </li>
+              <li className="flex items-center space-x-2">
+                <div className="w-1.5 h-1.5 bg-purple-600 rounded-full"></div>
+                <span>Context & memory management</span>
+              </li>
+            </ul>
+          </div>
+
+          <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-8">
+            <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center mb-4">
+              <Zap className="w-6 h-6 text-green-600" />
+            </div>
+            <h3 className="text-xl font-bold text-gray-900 mb-3">RAG Systems</h3>
+            <p className="text-gray-600 mb-4">
+              Design and deploy production RAG systems. Learn embeddings, vector search,
+              and system architecture.
+            </p>
+            <ul className="space-y-2 text-sm text-gray-600">
+              <li className="flex items-center space-x-2">
+                <div className="w-1.5 h-1.5 bg-green-600 rounded-full"></div>
+                <span>Python + n8n integration</span>
+              </li>
+              <li className="flex items-center space-x-2">
+                <div className="w-1.5 h-1.5 bg-green-600 rounded-full"></div>
+                <span>Vector databases & search</span>
+              </li>
+              <li className="flex items-center space-x-2">
+                <div className="w-1.5 h-1.5 bg-green-600 rounded-full"></div>
+                <span>Complete RAG deployment</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      {/* Course Structure */}
+      <section className="bg-white py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">30-Day Learning Path</h2>
+            <p className="text-xl text-gray-600">Structured curriculum with hands-on projects</p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-8">
+            <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-8 border-2 border-blue-200">
+              <div className="text-blue-700 font-bold text-sm mb-2">WEEK 1-2</div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">Foundations</h3>
+              <p className="text-gray-700 mb-6">
+                Master JavaScript and n8n automation. Build API workflows, handle errors, and manage data flow.
+              </p>
+              <div className="bg-white rounded-lg p-4">
+                <div className="text-sm font-semibold text-gray-700 mb-2">Projects:</div>
+                <ul className="space-y-2 text-sm text-gray-600">
+                  <li>• Smart Data Transformer</li>
+                  <li>• Weather Alert Bot</li>
+                </ul>
               </div>
             </div>
-            <div className="bg-green-50 rounded-xl p-4 border border-green-100">
-              <div className="flex items-center space-x-2">
-                <Target className="w-5 h-5 text-green-600" />
-                <span className="text-sm font-medium text-gray-700">Projects</span>
-              </div>
-              <div className="text-2xl font-bold text-green-600 mt-2">
-                {Math.floor(completedDays / 7)}/4
+
+            <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-2xl p-8 border-2 border-purple-200">
+              <div className="text-purple-700 font-bold text-sm mb-2">WEEK 3-4</div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">AI Systems</h3>
+              <p className="text-gray-700 mb-6">
+                Integrate AI APIs, build intelligent agents, and deploy complete RAG systems with vector search.
+              </p>
+              <div className="bg-white rounded-lg p-4">
+                <div className="text-sm font-semibold text-gray-700 mb-2">Projects:</div>
+                <ul className="space-y-2 text-sm text-gray-600">
+                  <li>• AI Assistant with Memory</li>
+                  <li>• Production RAG System</li>
+                </ul>
               </div>
             </div>
           </div>
         </div>
+      </section>
 
-        {/* Course Curriculum */}
-        <div className="mb-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">Course Curriculum</h2>
-          <div className="grid gap-6 md:grid-cols-2">
-            {weeks.map((week) => {
-              const Icon = week.icon
-              const weekCompleted = week.days.every(day =>
-                progress?.completedDays?.includes(day)
-              )
-              const someCompleted = week.days.some(day =>
-                progress?.completedDays?.includes(day)
-              )
-
-              return (
-                <div
-                  key={week.number}
-                  className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden card-hover"
-                >
-                  {/* Header */}
-                  <div className={`${week.color} p-6 text-white`}>
-                    <div className="flex items-start justify-between">
-                      <div>
-                        <div className="text-sm font-semibold opacity-90 mb-1">
-                          Week {week.number}
-                        </div>
-                        <h3 className="text-xl font-bold mb-2">{week.title}</h3>
-                        <div className="flex items-center space-x-2 text-sm opacity-90">
-                          <Icon className="w-4 h-4" />
-                          <span>Project: {week.project}</span>
-                        </div>
-                      </div>
-                      {weekCompleted && (
-                        <CheckCircle2 className="w-8 h-8" />
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Days */}
-                  <div className="p-6">
-                    <div className="flex items-center justify-between mb-4">
-                      <span className="text-sm font-semibold text-gray-700">Daily Lessons</span>
-                      <span className="text-xs text-gray-500">
-                        {week.days.filter(d => progress?.completedDays?.includes(d)).length}/{week.days.length} complete
-                      </span>
-                    </div>
-                    <div className="space-y-2">
-                      {week.days.map((day) => {
-                        const isCompleted = progress?.completedDays?.includes(day)
-                        return (
-                          <Link
-                            key={day}
-                            href={`/day/${day}`}
-                            className="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 transition border border-gray-100"
-                          >
-                            <div className="flex items-center space-x-3">
-                              {isCompleted ? (
-                                <CheckCircle2 className="w-5 h-5 text-green-500" />
-                              ) : (
-                                <Circle className="w-5 h-5 text-gray-300" />
-                              )}
-                              <span className={`font-medium ${isCompleted ? 'text-gray-500' : 'text-gray-900'}`}>
-                                Day {day}
-                              </span>
-                            </div>
-                            <span className="text-sm text-gray-500">30 min →</span>
-                          </Link>
-                        )
-                      })}
-                    </div>
-
-                    {/* Project Link */}
-                    <Link
-                      href={`/project/${week.number}`}
-                      className="mt-4 w-full flex items-center justify-center space-x-2 bg-gray-50 hover:bg-gray-100 text-gray-700 font-semibold py-3 rounded-lg transition border border-gray-200"
-                    >
-                      <Target className="w-4 h-4" />
-                      <span>Week {week.number} Project</span>
-                    </Link>
-                  </div>
-                </div>
-              )
-            })}
-          </div>
-        </div>
-
-        {/* Call to Action */}
-        <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl shadow-xl p-8 text-white text-center">
-          <h2 className="text-3xl font-bold mb-4">Ready to Start Learning?</h2>
-          <p className="text-blue-100 mb-6 text-lg">
-            Begin your journey to becoming an AI Systems Builder today
+      {/* CTA */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+        <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-3xl shadow-2xl p-12 text-center text-white">
+          <h2 className="text-4xl font-bold mb-4">Ready to Start Your Journey?</h2>
+          <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
+            Join hundreds of students learning to build AI systems. Start today with just 30 minutes per day.
           </p>
           <Link
-            href="/day/1"
-            className="inline-flex items-center space-x-2 bg-white text-blue-600 px-8 py-3 rounded-lg font-bold hover:bg-gray-100 transition"
+            href="/register"
+            className="inline-flex items-center space-x-2 bg-white text-blue-600 px-8 py-4 rounded-lg hover:bg-gray-100 transition font-bold text-lg"
           >
-            <Rocket className="w-5 h-5" />
-            <span>Start Day 1</span>
+            <Rocket className="w-6 h-6" />
+            <span>Start Learning Now</span>
           </Link>
+          <div className="mt-6 text-blue-100 text-sm">
+            No credit card required • Free forever • Start immediately
+          </div>
         </div>
-      </main>
+      </section>
 
       {/* Footer */}
-      <footer className="bg-white border-t border-gray-200 mt-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <footer className="bg-white border-t border-gray-200 py-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center text-gray-600">
-            <p className="font-semibold mb-2">30-Day AI Systems Builder Path</p>
-            <p className="text-sm">Transform from automation beginner to AI systems architect</p>
+            <p className="font-semibold mb-2">30-Day AI Systems Builder</p>
+            <p className="text-sm">Transform from beginner to AI systems architect</p>
           </div>
         </div>
       </footer>

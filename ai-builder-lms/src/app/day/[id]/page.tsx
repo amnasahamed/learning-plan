@@ -3,9 +3,10 @@
 import { useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
+import { useAuth } from '@/context/AuthContext'
 import {
   ArrowLeft, ArrowRight, CheckCircle2, Circle, Book, Code2,
-  Target, Lightbulb, ExternalLink, Save, ChevronDown, ChevronUp
+  Target, Lightbulb, ExternalLink, Save, ChevronDown, ChevronUp, LogOut, User
 } from 'lucide-react'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism'
@@ -15,12 +16,19 @@ export default function DayPage() {
   const params = useParams()
   const router = useRouter()
   const dayId = parseInt(params.id as string)
+  const { user, loading: authLoading, logout } = useAuth()
 
   const [isCompleted, setIsCompleted] = useState(false)
   const [note, setNote] = useState('')
   const [savedNote, setSavedNote] = useState('')
   const [showSolution, setShowSolution] = useState(false)
   const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    if (!authLoading && !user) {
+      router.push('/login')
+    }
+  }, [user, authLoading, router])
 
   // Find the day data
   const findDayData = () => {
@@ -114,32 +122,38 @@ export default function DayPage() {
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
             <Link
-              href="/"
+              href="/dashboard"
               className="flex items-center space-x-2 text-gray-700 hover:text-blue-600 transition"
             >
               <ArrowLeft className="w-5 h-5" />
               <span className="font-medium">Back to Dashboard</span>
             </Link>
-            <button
-              onClick={toggleComplete}
-              className={`flex items-center space-x-2 px-4 py-2 rounded-lg font-medium transition ${
-                isCompleted
-                  ? 'bg-green-100 text-green-700 hover:bg-green-200'
-                  : 'bg-blue-600 text-white hover:bg-blue-700'
-              }`}
-            >
-              {isCompleted ? (
-                <>
-                  <CheckCircle2 className="w-5 h-5" />
-                  <span>Completed</span>
-                </>
-              ) : (
-                <>
-                  <Circle className="w-5 h-5" />
-                  <span>Mark Complete</span>
-                </>
-              )}
-            </button>
+            <div className="flex items-center space-x-4">
+              <div className="flex items-center space-x-2 text-gray-700 text-sm">
+                <User className="w-4 h-4" />
+                <span>{user?.name}</span>
+              </div>
+              <button
+                onClick={toggleComplete}
+                className={`flex items-center space-x-2 px-4 py-2 rounded-lg font-medium transition ${
+                  isCompleted
+                    ? 'bg-green-100 text-green-700 hover:bg-green-200'
+                    : 'bg-blue-600 text-white hover:bg-blue-700'
+                }`}
+              >
+                {isCompleted ? (
+                  <>
+                    <CheckCircle2 className="w-5 h-5" />
+                    <span>Completed</span>
+                  </>
+                ) : (
+                  <>
+                    <Circle className="w-5 h-5" />
+                    <span>Mark Complete</span>
+                  </>
+                )}
+              </button>
+            </div>
           </div>
         </div>
       </header>
