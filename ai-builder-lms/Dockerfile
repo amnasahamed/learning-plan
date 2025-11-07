@@ -6,7 +6,7 @@ RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
 # Install dependencies
-COPY package.json package-lock.json* ./
+COPY package.json package-lock.json ./
 RUN npm ci
 
 # Rebuild the source code only when needed
@@ -14,6 +14,9 @@ FROM base AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
+
+# Create public directory if it doesn't exist
+RUN mkdir -p public
 
 # Disable telemetry during build
 ENV NEXT_TELEMETRY_DISABLED 1
@@ -30,13 +33,16 @@ ENV NEXT_TELEMETRY_DISABLED 1
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
-# Copy built application
-COPY --from=builder /app/public ./public
-COPY --from=builder /app/.next/standalone ./
-COPY --from=builder /app/.next/static ./.next/static
+# Copy built application from standalone output
+# Note: standalone output includes everything needed to run the app
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
-# Create data directory for progress storage
-RUN mkdir -p /app/data && chown nextjs:nodejs /app/data
+# Copy public folder (may be empty but needs to exist)
+COPY --from=builder --chown=nextjs:nodejs /app/public ./public
+
+# Ensure data directory exists with proper permissions
+RUN mkdir -p /app/data && chown -R nextjs:nodejs /app/data
 
 USER nextjs
 
