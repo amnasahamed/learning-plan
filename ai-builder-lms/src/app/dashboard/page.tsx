@@ -296,7 +296,7 @@ export default function DashboardPage() {
                 rel="noopener noreferrer"
                 className="inline-flex items-center space-x-1 text-blue-600 hover:text-blue-700 font-medium transition"
               >
-                <span>Amna Sahamed</span>
+                <span>Amnas Ahamed</span>
                 <Linkedin className="w-4 h-4" />
               </a>
             </div>
