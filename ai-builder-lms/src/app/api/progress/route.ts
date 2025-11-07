@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from 'next/server'
 import fs from 'fs'
 import path from 'path'
 
+// Force dynamic rendering for this route
+export const dynamic = 'force-dynamic';
+
 const DATA_FILE = path.join(process.cwd(), 'data', 'progress.json')
 
 // Ensure data directory exists

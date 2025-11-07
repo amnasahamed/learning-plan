@@ -3,6 +3,9 @@ import fs from 'fs';
 import path from 'path';
 import { verifyToken, sanitizeUser, User } from '@/lib/auth';
 
+// Force dynamic rendering for this route
+export const dynamic = 'force-dynamic';
+
 const USERS_FILE = path.join(process.cwd(), 'data', 'users.json');
 
 function getUsers(): User[] {
